@@ -1,0 +1,2 @@
+[functions.export-backup]
+verify_jwt = true

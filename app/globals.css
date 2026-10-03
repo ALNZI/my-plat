@@ -1,0 +1,407 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ==================================================
+       LIGHT MODE COLOR & GLASS SYSTEM (تعليمات.md)
+       Primary Sky Blue: #AADDFC
+       Light Sky Blue:   #B4E1FC
+       Soft Blue:        #C2E6FC
+       Very Light Glass: #CAEBFD
+       Highlight:        #DAF1FD
+       Blue Accent:      #84C9F8
+       Text:             #2477A8
+       Dark Text:        #155A82
+       Primary Teal:     #2BA8A2
+       ================================================== */
+    --light-bg: #AADDFC;
+    --light-bg-soft: #C2E6FC;
+    --light-bg-highlight: #DAF1FD;
+    --light-surface: rgba(255, 255, 255, 0.35);
+    --light-surface-card: rgba(255, 255, 255, 0.38);
+    --light-surface-strong: rgba(255, 255, 255, 0.55);
+    --light-surface-modal: rgba(255, 255, 255, 0.72);
+    --light-border: rgba(255, 255, 255, 0.60);
+    --light-border-soft: rgba(255, 255, 255, 0.55);
+    --light-border-input: rgba(255, 255, 255, 0.65);
+    --light-primary: #2BA8A2;
+    --light-blue: #84C9F8;
+    --light-text: #2477A8;
+    --light-text-dark: #155A82;
+
+    /* Tailwind HSL mappings for Light Mode */
+    --background: 203 93% 83%; /* #AADDFC */
+    --foreground: 202 72% 30%; /* #155A82 */
+    --card: 204 90% 98%;
+    --card-foreground: 202 72% 30%;
+    --popover: 204 90% 98%;
+    --popover-foreground: 202 72% 30%;
+    --primary: 177 59% 41%; /* #2BA8A2 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 203 80% 90%;
+    --secondary-foreground: 202 65% 40%;
+    --muted: 203 70% 92%;
+    --muted-foreground: 202 50% 40%;
+    --accent: 203 80% 92%;
+    --accent-foreground: 202 65% 40%;
+    --destructive: 0 84% 60%; /* #EF4444 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 203 50% 82%;
+    --input: 203 50% 82%;
+    --ring: 204 90% 75%; /* #84C9F8 */
+    --chart-1: 177 59% 41%;
+    --chart-2: 204 90% 75%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 142 71% 45%;
+    --chart-5: 0 84% 60%;
+    --radius: 0.875rem;
+
+    /* Semantic tokens for Light Mode */
+    --surface-bg: #AADDFC;
+    --surface-primary: rgba(255, 255, 255, 0.38);
+    --surface-secondary: rgba(255, 255, 255, 0.35);
+    --surface-elevated: rgba(255, 255, 255, 0.55);
+    --surface-hover: rgba(255, 255, 255, 0.45);
+    --surface-border: rgba(255, 255, 255, 0.60);
+    --text-primary: #155A82;
+    --text-secondary: #2477A8;
+    --text-muted: #6FA7C8;
+    --accent-primary: #2BA8A2;
+    --accent-secondary: #84C9F8;
+    --color-danger: #EF4444;
+    --color-warning: #F59E0B;
+    --color-info: #84C9F8;
+  }
+
+  .dark {
+    /* ==================================================
+       EXISTING DARK MODE TOKENS — PRESERVED 100% UNCHANGED
+       ================================================== */
+    --background: 210 11% 7%; /* #111315 */
+    --foreground: 200 17% 97%; /* #F5F7F8 */
+    --card: 210 11% 11%; /* #191C1F */
+    --card-foreground: 200 17% 97%; /* #F5F7F8 */
+    --popover: 207 9% 16%; /* #25292D */
+    --popover-foreground: 200 17% 97%; /* #F5F7F8 */
+    --primary: 160 84% 39%; /* #10B981 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 11% 14%; /* #202428 */
+    --secondary-foreground: 200 17% 97%;
+    --muted: 210 11% 14%; /* #202428 */
+    --muted-foreground: 213 8% 68%; /* #A7ADB4 */
+    --accent: 210 11% 19%; /* #2B3035 */
+    --accent-foreground: 160 84% 39%;
+    --destructive: 0 84% 60%; /* #EF4444 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 210 10% 23%; /* #343A40 */
+    --input: 210 10% 23%; /* #343A40 */
+    --ring: 160 84% 39%; /* #10B981 */
+    --chart-1: 160 84% 39%;
+    --chart-2: 142 71% 45%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 199 89% 60%;
+    --chart-5: 0 84% 60%;
+    --radius: 0.875rem;
+
+    /* Semantic hex tokens for Dark Mode */
+    --surface-bg: #111315;
+    --surface-primary: #191C1F;
+    --surface-secondary: #202428;
+    --surface-elevated: #25292D;
+    --surface-hover: #2B3035;
+    --surface-border: #343A40;
+    --text-primary: #F5F7F8;
+    --text-secondary: #A7ADB4;
+    --text-muted: #737A82;
+    --accent-primary: #10B981;
+    --accent-secondary: #22C55E;
+    --color-danger: #EF4444;
+    --color-warning: #F59E0B;
+    --color-info: #38BDF8;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html, body {
+    max-width: 100%;
+    overflow-x: clip;
+    -webkit-overflow-scrolling: touch;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    color: var(--text-primary);
+    background-color: #AADDFC;
+    background-image: linear-gradient(135deg, #AADDFC 0%, #C2E6FC 50%, #DAF1FD 100%);
+    background-attachment: scroll;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .dark body {
+    background-color: #111315;
+    background-image: none;
+    color: #F5F7F8;
+  }
+}
+
+
+/* RTL/LTR utilities */
+[dir="rtl"] .ltr\:left-3 { left: auto; right: 0.75rem; }
+[dir="rtl"] .ltr\:right-3 { right: auto; left: 0.75rem; }
+[dir="rtl"] .ltr\:pl-10 { padding-left: 0; padding-right: 2.5rem; }
+[dir="rtl"] .ltr\:pr-10 { padding-right: 0; padding-left: 2.5rem; }
+[dir="rtl"] .ltr\:right-6 { right: auto; left: 1.5rem; }
+[dir="rtl"] .ltr\:left-6 { left: auto; right: 1.5rem; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(36, 119, 168, 0.25);
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(36, 119, 168, 0.45);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Line clamp */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Smooth animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn { animation: fadeIn 0.4s ease-out; }
+
+/* Print styles for CV */
+@media print {
+  nav, .fixed, button { display: none !important; }
+  body { background: white !important; color: black !important; }
+}
+
+/* ==================================================
+   REUSABLE GLASSMORPHISM UTILITIES (Light Mode sky-blue glass)
+   ================================================== */
+.glass-surface {
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 30px rgba(36, 119, 168, 0.08);
+}
+.dark .glass-surface {
+  background: #191C1F;
+  border-color: #343A40;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+.glass-nav {
+  background: rgba(170, 221, 252, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 8px 30px rgba(36, 119, 168, 0.08);
+}
+.dark .glass-nav {
+  background: rgba(25, 28, 31, 0.85);
+  border-color: #343A40;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.glass-sidebar {
+  background: rgba(255, 255, 255, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.dark .glass-sidebar {
+  background: #191C1F;
+  border-color: #343A40;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.60);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 1rem;
+  box-shadow: 0 8px 30px rgba(36, 119, 168, 0.08);
+}
+.dark .glass-card {
+  background: #191C1F;
+  border-color: #343A40;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+.glass-modal {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 15px 50px rgba(36, 119, 168, 0.12);
+}
+.dark .glass-modal {
+  background: #191C1F;
+  border-color: #343A40;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  color: #155A82;
+}
+.glass-input::placeholder {
+  color: #6FA7C8;
+}
+.glass-input:focus {
+  border-color: #84C9F8;
+  box-shadow: 0 0 0 3px rgba(132, 201, 248, 0.18);
+}
+.dark .glass-input {
+  background: #202428;
+  border-color: #343A40;
+  color: #F5F7F8;
+}
+.dark .glass-input::placeholder {
+  color: #737A82;
+}
+.dark .glass-input:focus {
+  border-color: #10B981;
+  box-shadow: 0 0 0 1px #10B981;
+}
+
+/* ==================================================
+   PILL & CATEGORY NAVIGATION (Updated for sky-blue glass & dark mode)
+   ================================================== */
+.pill-container {
+  background-color: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.60);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 9999px;
+  box-shadow: 0 4px 20px rgba(36, 119, 168, 0.06);
+}
+.dark .pill-container {
+  background-color: rgba(32, 36, 40, 0.6);
+  border-color: #343A40;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+.pill-button {
+  background-color: rgba(255, 255, 255, 0.40);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  color: #2477A8;
+  border-radius: 9999px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
+}
+.pill-button:hover {
+  background-color: rgba(255, 255, 255, 0.65);
+  color: #155A82;
+}
+.dark .pill-button {
+  background-color: #202428;
+  border-color: #343A40;
+  color: #A7ADB4;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.dark .pill-button:hover {
+  background-color: #2B3035;
+  color: #F5F7F8;
+}
+
+.pill-button-active {
+  background-color: #2BA8A2 !important;
+  border-color: #2BA8A2 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(43, 168, 162, 0.3);
+}
+.pill-button-active:hover {
+  background-color: #259690 !important;
+}
+.dark .pill-button-active {
+  background-color: #10B981 !important;
+  border-color: #10B981 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+.dark .pill-button-active:hover {
+  background-color: #22C55E !important;
+}
+
+/* Badges */
+.badge-botanical {
+  background-color: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.30);
+  color: #15803d;
+  border-radius: 9999px;
+}
+.dark .badge-botanical {
+  background-color: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #6ee7b7;
+}
+
+.badge-sale {
+  background-color: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.30);
+  color: #dc2626;
+  border-radius: 9999px;
+}
+.dark .badge-sale {
+  background-color: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+.badge-citrus {
+  background-color: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.30);
+  color: #d97706;
+  border-radius: 9999px;
+}
+.dark .badge-citrus {
+  background-color: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
