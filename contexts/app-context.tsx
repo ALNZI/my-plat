@@ -132,24 +132,76 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
+    let isMounted = true;
+
+    const syncSession = async () => {
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (!isMounted) return;
+
+        console.info('[Auth] getSession result', {
+          hasSession: !!data?.session,
+          hasUser: !!data?.session?.user,
+          userId: data?.session?.user?.id ?? null,
+          error: error?.message ?? null,
+        });
+
+        setSession(data.session ?? null);
+      } catch (error) {
+        console.error('[Auth] getSession failed', error);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    void syncSession();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((event, sess) => {
+      console.info('[Auth] onAuthStateChange', {
+        event,
+        hasSession: !!sess,
+        hasUser: !!sess?.user,
+        userId: sess?.user?.id ?? null,
+        pathname: typeof window !== 'undefined' ? window.location.pathname : null,
+      });
+
+      setSession(sess ?? null);
       setLoading(false);
     });
 
-    const { data: listener } = supabase.auth.onAuthStateChange((event, sess) => {
-      (async () => {
-        setSession(sess);
-        setLoading(false);
-      })();
-    });
-
-    return () => listener.subscription.unsubscribe();
+    return () => {
+      isMounted = false;
+      listener.subscription.unsubscribe();
+    };
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error: error?.message || null };
+    try {
+      const pathname = typeof window !== 'undefined' ? window.location.pathname : null;
+      console.info('[Auth] signInWithPassword start', {
+        pathname,
+        email: email ? `${email.slice(0, 2)}***@${email.split('@')[1] ?? 'unknown'}` : null,
+      });
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      console.info('[Auth] signInWithPassword result', {
+        pathname,
+        hasSession: !!data?.session,
+        hasUser: !!data?.user,
+        userId: data?.user?.id ?? null,
+        error: error?.message ?? null,
+      });
+
+      if (data?.session && data?.user) {
+        setSession(data.session);
+      }
+
+      return { error: error?.message || null };
+    } catch (error) {
+      console.error('[Auth] signInWithPassword crashed', error);
+      return { error: 'Unexpected sign-in error. Please try again.' };
+    }
   };
 
   const signOut = async () => {

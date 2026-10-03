@@ -37,11 +37,46 @@ export function PortfolioSections() {
   const [sending, setSending] = useState(false);
   const [contactSettings, setContactSettings] = useState<ContactSettings | null>(null);
 
+  const loadContactSettings = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.from('contact_settings').select('*').limit(1).maybeSingle();
+      if (error) {
+        console.warn('[Portfolio] contact settings fetch failed', error);
+        return;
+      }
+      setContactSettings((data as ContactSettings) ?? null);
+    } catch (error) {
+      console.error('[Portfolio] contact settings fetch crashed', error);
+    }
+  }, []);
+
+  const loadItems = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.from('items').select('*').order('sort_order', { ascending: true });
+
+      if (error) {
+        console.error('[Portfolio] items fetch failed', error);
+        setItems([]);
+        return;
+      }
+
+      setItems((data as Item[]) || []);
+    } catch (error) {
+      console.error('[Portfolio] items fetch crashed', error);
+      setItems([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    loadItems();
-    loadContactSettings();
+    void loadItems();
+    void loadContactSettings();
 
     const handleHashChange = () => {
+      if (typeof window === 'undefined') return;
       const hash = window.location.hash.replace('#', '');
       if (['projects', 'awards', 'certificates', 'research', 'other'].includes(hash)) {
         setActiveCategory(hash);
@@ -53,18 +88,7 @@ export function PortfolioSections() {
     handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
-
-  const loadContactSettings = useCallback(async () => {
-    const { data } = await supabase.from('contact_settings').select('*').limit(1).maybeSingle();
-    if (data) setContactSettings(data as ContactSettings);
-  }, []);
-
-  const loadItems = useCallback(async () => {
-    const { data } = await supabase.from('items').select('*').order('sort_order', { ascending: true });
-    setItems((data as Item[]) || []);
-    setLoading(false);
-  }, []);
+  }, [loadItems, loadContactSettings]);
 
   const years = useMemo(() => {
     const set = new Set<number>();

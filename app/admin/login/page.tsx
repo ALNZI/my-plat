@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
+import { supabase } from '@/lib/supabase';
 
 export default function LoginPage() {
   const { signIn, session, loading } = useAuth();
@@ -27,13 +28,46 @@ export default function LoginPage() {
     e.preventDefault();
     setSubmitting(true);
 
-    const { error } = await signIn(email, password);
-    setSubmitting(false);
-    if (error) {
-      toast.error(error);
-    } else {
-      toast.success(t('admin.dashboard'));
-      router.push('/admin');
+    console.info('[Admin Login] submitting credentials', {
+      pathname: window.location.pathname,
+      hasEmail: !!email,
+      hasPassword: !!password,
+    });
+
+    try {
+      const { error } = await signIn(email, password);
+
+      console.info('[Admin Login] signIn response', {
+        pathname: window.location.pathname,
+        error: error ?? null,
+      });
+
+      if (error) {
+        toast.error(error);
+        return;
+      }
+
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      console.info('[Admin Login] post-login session check', {
+        pathname: window.location.pathname,
+        hasSession: !!sessionData?.session,
+        hasUser: !!sessionData?.session?.user,
+        userId: sessionData?.session?.user?.id ?? null,
+        sessionError: sessionError?.message ?? null,
+      });
+
+      if (sessionData?.session?.user) {
+        toast.success(t('admin.dashboard'));
+        router.push('/admin');
+        return;
+      }
+
+      toast.error('Login succeeded but the session was not available yet. Please try again.');
+    } catch (error) {
+      console.error('[Admin Login] login flow crashed', error);
+      toast.error('Unexpected login error. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
   };
 

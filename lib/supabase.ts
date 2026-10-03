@@ -7,28 +7,43 @@ if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_A
   console.warn('Supabase environment variables are missing. Please check your .env file or Vercel Environment Variables.');
 }
 
+const memoryStorage = new Map<string, string>();
+
 const safeLocalStorageAdapter = {
   getItem: (key: string): string | null => {
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
-        return window.localStorage.getItem(key);
+        return window.localStorage.getItem(key) ?? memoryStorage.get(key) ?? null;
       }
-    } catch {}
-    return null;
+    } catch (error) {
+      console.warn('[Supabase Auth] localStorage read failed, using in-memory fallback.', error);
+    }
+
+    return memoryStorage.get(key) ?? null;
   },
   setItem: (key: string, value: string): void => {
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
         window.localStorage.setItem(key, value);
+        memoryStorage.set(key, value);
+        return;
       }
-    } catch {}
+    } catch (error) {
+      console.warn('[Supabase Auth] localStorage write failed, using in-memory fallback.', error);
+    }
+
+    memoryStorage.set(key, value);
   },
   removeItem: (key: string): void => {
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
         window.localStorage.removeItem(key);
       }
-    } catch {}
+    } catch (error) {
+      console.warn('[Supabase Auth] localStorage remove failed.', error);
+    }
+
+    memoryStorage.delete(key);
   },
 };
 
